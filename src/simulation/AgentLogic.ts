@@ -32,14 +32,14 @@ export class AgentLogic {
     
     if (neighborCount > 0) {
         if (avgNeighborPanic > agent.panicLevel) {
-            agent.panicLevel += (avgNeighborPanic - agent.panicLevel) * 0.1 * dt;
-        } else if (avgNeighborPanic > 0.3) {
-            agent.panicLevel = Math.max(agent.panicLevel, avgNeighborPanic * 0.6);
+            agent.panicLevel += (avgNeighborPanic - agent.panicLevel) * 0.15 * dt;
+        } else if (avgNeighborPanic > 0.25) {
+            agent.panicLevel = Math.max(agent.panicLevel, avgNeighborPanic * 0.65);
         }
     }
     
-    if (neighborCount === 0 || avgNeighborPanic < 0.15) {
-        agent.panicLevel *= 0.995;
+    if (neighborCount === 0 || avgNeighborPanic < 0.1) {
+        agent.panicLevel *= 0.996;
     }
     
     agent.panicLevel = Math.max(0, Math.min(1.0, agent.panicLevel));

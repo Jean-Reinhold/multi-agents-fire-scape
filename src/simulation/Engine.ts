@@ -132,19 +132,19 @@ export class SimulationEngine {
             
             let panicIncrease = 0;
             if (minFireDistance < 3) {
-                panicIncrease = 0.03 * dt;
+                panicIncrease = 0.05 * dt;
             } else if (minFireDistance < 8) {
-                panicIncrease = 0.015 * dt;
+                panicIncrease = 0.025 * dt;
             } else if (minFireDistance < 15) {
-                panicIncrease = 0.008 * dt;
+                panicIncrease = 0.012 * dt;
             } else {
-                panicIncrease = 0.002 * dt;
+                panicIncrease = 0.004 * dt;
             }
             
             agent.panicLevel = Math.min(1.0, agent.panicLevel + panicIncrease);
             
-            if (this.stats.timeElapsed >= 2 && this.stats.timeElapsed < 2.5) {
-                agent.panicLevel = Math.min(1.0, agent.panicLevel + 0.03 * dt);
+            if (this.stats.timeElapsed >= 2 && this.stats.timeElapsed < 3) {
+                agent.panicLevel = Math.min(1.0, agent.panicLevel + 0.05 * dt);
             }
         }
 
