@@ -79,6 +79,7 @@ export class SimulationEngine {
               this.grid[startY][startX].hasFire = true;
               this.fireCells.push(this.grid[startY][startX]);
               this.nextFireSpreadTime = this.stats.timeElapsed + 1.0;
+              this.flowField = generateFlowField(this.grid);
           }
       }
 
@@ -103,6 +104,10 @@ export class SimulationEngine {
               });
           });
           this.fireCells.push(...newFireCells);
+          
+          if (newFireCells.length > 0) {
+              this.flowField = generateFlowField(this.grid);
+          }
       }
   }
 

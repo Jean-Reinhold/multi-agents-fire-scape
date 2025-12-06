@@ -7,11 +7,38 @@ export const generateFlowField = (grid: Cell[][]): Vector2D[][] => {
   
   const queue: { x: number, y: number }[] = [];
 
+  const isReachable = (x: number, y: number): boolean => {
+    if (grid[y][x].hasFire || grid[y][x].isBlocked) {
+      return false;
+    }
+
+    const dirs = [
+      { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 0 }, { x: -1, y: 0 },
+      { x: 1, y: 1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: -1, y: -1 }
+    ];
+
+    for (const d of dirs) {
+      const nx = x + d.x;
+      const ny = y + d.y;
+      
+      if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT) {
+        const neighbor = grid[ny][nx];
+        if (neighbor.type !== CellType.WALL && !neighbor.hasFire) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  };
+
   for (let y = 0; y < GRID_HEIGHT; y++) {
     for (let x = 0; x < GRID_WIDTH; x++) {
       if (grid[y][x].type === CellType.EXIT || grid[y][x].type === CellType.REVOLVING_DOOR) {
-        distMap[y][x] = 0;
-        queue.push({ x, y });
+        if (isReachable(x, y)) {
+          distMap[y][x] = 0;
+          queue.push({ x, y });
+        }
       }
     }
   }
@@ -31,6 +58,7 @@ export const generateFlowField = (grid: Cell[][]): Vector2D[][] => {
 
       if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT) {
         if (grid[ny][nx].type === CellType.WALL) continue;
+        if (grid[ny][nx].hasFire) continue;
 
         if (distMap[ny][nx] > currentDist + 1) {
           distMap[ny][nx] = currentDist + 1;
