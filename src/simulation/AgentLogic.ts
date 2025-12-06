@@ -16,7 +16,7 @@ export class AgentLogic {
     config: SimulationConfig,
     dt: number // time scale factor
   ) {
-    if (agent.state !== AgentState.ALIVE) return;
+    if (agent.state !== AgentState.ALIVE && agent.state !== AgentState.JAMMED) return;
 
     let avgNeighborPanic = 0;
     let neighborCount = 0;

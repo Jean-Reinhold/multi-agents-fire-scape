@@ -167,7 +167,9 @@ export class SimulationEngine {
                  agent.state = AgentState.JAMMED;
              }
         } else if (agent.state === AgentState.JAMMED) {
-            if (Vector.mag(agent.velocity) > 0.01) {
+            if (!this.isRevolvingDoorJammed) {
+                agent.state = AgentState.ALIVE;
+            } else if (Vector.mag(agent.velocity) > 0.01) {
                 agent.state = AgentState.ALIVE;
             }
         }
@@ -199,7 +201,6 @@ export class SimulationEngine {
 
   private updateRevolvingDoor() {
     if (this.revolvingDoorCells.length === 0) return;
-    if (this.isRevolvingDoorJammed) return;
 
     let sumForces = { x: 0, y: 0 };
     let sumMagnitudes = 0;
@@ -219,19 +220,38 @@ export class SimulationEngine {
         }
     });
 
-    if (count === 0) return;
+    if (count === 0) {
+        if (this.isRevolvingDoorJammed) {
+            this.isRevolvingDoorJammed = false;
+            this.revolvingDoorCells.forEach(cell => {
+                cell.isBlocked = false;
+            });
+            this.flowField = generateFlowField(this.grid);
+        }
+        return;
+    }
 
     const netForce = Vector.mag(sumForces);
     const conflict = sumMagnitudes - netForce; 
     const jamThreshold = this.config.doorJamSensitivity;
 
-    if (conflict > jamThreshold) {
-        this.isRevolvingDoorJammed = true;
-        this.stats.jamCount++;
-        this.revolvingDoorCells.forEach(cell => {
-            cell.isBlocked = true;
-        });
-        this.flowField = generateFlowField(this.grid);
+    if (this.isRevolvingDoorJammed) {
+        if (conflict <= jamThreshold) {
+            this.isRevolvingDoorJammed = false;
+            this.revolvingDoorCells.forEach(cell => {
+                cell.isBlocked = false;
+            });
+            this.flowField = generateFlowField(this.grid);
+        }
+    } else {
+        if (conflict > jamThreshold) {
+            this.isRevolvingDoorJammed = true;
+            this.stats.jamCount++;
+            this.revolvingDoorCells.forEach(cell => {
+                cell.isBlocked = true;
+            });
+            this.flowField = generateFlowField(this.grid);
+        }
     }
   }
 
