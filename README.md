@@ -2,7 +2,9 @@
 
 A sophisticated Multi-Agent System (MAS) simulation that recreates the tragic Cocoanut Grove nightclub fire of November 28, 1942, using Complexity Theory and Complex Adaptive Systems principles. This interactive web application allows users to explore different evacuation scenarios and understand how simple interactions between individuals can lead to system-wide failures.
 
-## Table of Contents
+🌐 **Live Demo**: [https://jean-reinhold.github.io/multi-agents-fire-scape](https://jean-reinhold.github.io/multi-agents-fire-scape)
+
+## 📋 Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -59,7 +61,7 @@ This simulation allows researchers and educators to explore "what if" scenarios 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Jean-Reinhold/multi-agents-fire-scape.git
 cd multi-agents-fire-scape
 ```
 
